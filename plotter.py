@@ -102,7 +102,7 @@ def plot_spiral(spiral, tmax, ax=None, nbpoints=500, **spiralkwargs):
     else:
         plt.plot(*to_cartesian(spiral.radius(thetas), thetas), **spiralkwargs)
 
-def plot_pie(spiral, sections, tmax,
+def plot_pie(spiral, sections, tmax, labels,
                      minmax=[[-1, 1], [-1, 1]],
                      ax=None, colors=None, cmap=None, figsize=None,
                      edgecolor='w', edgewidth=3, axisoff=True,
@@ -129,6 +129,7 @@ def plot_pie(spiral, sections, tmax,
         patch.set_linewidth(edgewidth)
         patch.set_facecolor(colors[i])
         patch.__dict__.update(**patchkwargs)
+        patch.set_label(labels[i])
         ax.add_patch(patch)
 
     ax.set_aspect('equal')
