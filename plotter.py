@@ -137,3 +137,49 @@ def plot_pie(spiral, sections, tmax, labels,
     plt.ylim(*minmax[1])
 
     plot_spiral(spiral, tmax, ax=ax, nbpoints=nbpoints, **spiralkwargs)
+
+### Wrappers for ui
+def parse_pie(pie, labels=None, name=None):
+
+    try:
+        import pandas
+        if isinstance(pie, pandas.Series):
+            pieval = pie.values
+            pielab = pie.index.values
+            piename = pie.name
+            if piename is None:
+                piename = name
+    except (NameError, ImportError):
+        raise TypeError('wrong input type')
+
+    if isinstance(pie, (list, set, np.ndarray, tuple)):
+        pieval = pie
+        pielab = labels
+        piename = name
+
+    if pielab is None:
+        pielab = range(len(pie))
+    if piename is None:
+        piename = "Nautilus plot"
+
+    return pieval, pielab, piename
+
+
+def plot(pie, labels=None, name=None, spiral=spirals.ArchimedesSpiral(),
+         tmin=0, tmax=4*np.pi, sort=False, n_points=1000,
+         cmap='viridis', figsize=(10, 10),
+         edgewidth=3, spiralkwargs={'ls':'', 'c':'w'},
+         axisoff=True):
+
+    pieval, pielab, piename = parse_pie(pie, labels, name)
+
+
+    t_quads = prepare_pie(spiral, pieval, tmin, tmax, sort)
+    sections, minmax = premake_patches(spiral, t_quads, n_points)
+    plot_pie(spiral, sections, tmax, pielab, minmax=minmax,
+                     cmap=cmap, figsize=figsize,
+                     edgewidth=edgewidth,
+                     spiralkwargs=spiralkwargs,
+                     axisoff=axisoff)
+    plt.title(piename)
+    plt.legend()

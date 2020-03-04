@@ -22,4 +22,4 @@ def run_example():
     plt.legend()
     plt.show()
 
-run_example()
+# run_example()
