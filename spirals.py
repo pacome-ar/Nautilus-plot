@@ -24,7 +24,10 @@ class Spiral():
     def __init__(self):
         pass
 
-    def integrate_spiral(self, x):
+    def integrate_spiral(self, xx):
+        return np.array([self.integrate_spiral_one(x) for x in xx])
+    
+    def integrate_spiral_one(self, x):
         p = x // (2*np.pi)
         try:
             temp = self.integral(x - 2. * np.pi * np.arange(p+1))
@@ -36,7 +39,7 @@ class Spiral():
                 for xi, pi in zip(x, p)])
 
     def get_area(self, t1, t2):
-        return self.integrate_spiral(t2) - self.integrate_spiral(t1)
+        return self.integrate_spiral_one(t2) - self.integrate_spiral_one(t1)
 
     def make_inverse_interpolant(self, tmin=0, tmax=2*np.pi, interpoints=100):
         return make_inverse_interpolant(
